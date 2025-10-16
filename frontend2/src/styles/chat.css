@@ -1,0 +1,211 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.chat-header {
+  padding: 20px 40px;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-toggle-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #666;
+}
+
+.menu-toggle-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.edit-icon {
+  font-size: 20px;
+}
+
+.chat-title h1 {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
+
+.chat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  position: relative;
+  min-height: 0;
+  overflow: auto;
+}
+
+.bot-info {
+  width: 100%;
+  position: relative;
+  padding: 20px 70px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.bot-info h2 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
+
+.bot-status {
+  color: #666;
+  font-size: 10px;
+  margin: 0;
+}
+
+.bot-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: #e0e0e0;
+}
+
+.chat-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 40px 24px;
+  min-height: 0;
+}
+
+.nmsu-logo {
+  margin-bottom: 32px;
+}
+
+.logo-container {
+  width: 110px;
+  height: 110px;
+  background: transparent;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-text {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+.welcome-message {
+  font-size: 18px;
+  font-weight: 500;
+  color: #666;
+  margin: 0;
+  text-align: center;
+}
+
+.chat-input-container {
+  padding: 20px 40px;
+  background-color: white;
+  flex-shrink: 0;
+}
+
+.input-wrapper {
+  position: relative;
+  max-width: 70%;
+  margin: 0 auto;
+}
+
+.message-input {
+  width: 100%;
+  padding: 12px 50px 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 24px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.message-input:focus {
+  border-color: #8b1538;
+}
+
+.message-input::placeholder {
+  color: #999;
+}
+
+.send-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: #8b1538;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #a91b47;
+}
+
+.disclaimer {
+  text-align: center;
+  color: #999;
+  font-size: 11px;
+  margin: 12px 0 0 0;
+}
