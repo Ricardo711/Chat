@@ -151,19 +151,50 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { Motion } from "motion-v";
 import axios from "axios";
 import { useGameStore } from "../store/gameStore";
 import { storeToRefs } from "pinia";
 
 const gameStore = useGameStore();
-const { userMessageCount, score, gameNumber, highestScore, highestScoreGame, showQuiz, currentQuestion, quizOptions } =
-  storeToRefs(gameStore);
+const {
+  userMessageCount,
+  score,
+  gameNumber,
+  highestScore,
+  highestScoreGame,
+  showQuiz,
+  currentQuestion,
+  quizOptions,
+} = storeToRefs(gameStore);
 
 const messageText = ref("");
 const isLoading = ref(false);
-const messages  = ref([]);
+const messages = ref([]);
+
+watch(
+  () => gameStore.userMessageCount,
+  (newVal, oldVal) => {
+    if (newVal === 0 && gameStore.gameNumber > 1) {
+      setTimeout(() => {
+        messages.value = [
+          {
+            id: 1,
+            text:
+              `🎮 New Game #${gameStore.gameNumber} started! Highest score so far: ${gameStore.highestScore}` +
+              (gameStore.highestScoreGame
+                ? ` (Game ${gameStore.highestScoreGame})`
+                : ""),
+            sender: "bot",
+            timestamp: new Date(),
+          },
+        ];
+      }, 400);
+    }
+  }
+);
+
 
 onMounted(() => {
   // expose for quick debugging if needed
@@ -179,17 +210,37 @@ const toggleSidebar = () => {
   }
 };
 
+// 🟢 FIXED selectAnswer (unchanged except slight delay)
 const selectAnswer = (option) => {
   const correct = option === gameStore.correctAnswer;
   gameStore.checkAnswer(option);
   messages.value.push({
     id: messages.value.length + 1,
-    text: correct ? "✅ Correct!" : `❌ Wrong! The correct answer was: ${gameStore.correctAnswer}`,
+    text: correct
+      ? "✅ Correct!"
+      : `❌ Wrong! The correct answer was: ${gameStore.correctAnswer}`,
     sender: "bot",
     timestamp: new Date(),
   });
+
+  // 🟢 Show "new game" message if that was question #20
+  if (gameStore.userMessageCount >= 20) {
+    setTimeout(() => {
+      messages.value.push({
+        id: messages.value.length + 1,
+        text:
+          `🎮 New Game #${gameStore.gameNumber} started! Highest score so far: ${gameStore.highestScore}` +
+          (gameStore.highestScoreGame
+            ? ` (Game ${gameStore.highestScoreGame})`
+            : ""),
+        sender: "bot",
+        timestamp: new Date(),
+      });
+    }, 500);
+  }
 };
 
+// 🟢 FIXED sendMessage
 const sendMessage = async () => {
   if (!messageText.value.trim()) return;
 
@@ -201,21 +252,35 @@ const sendMessage = async () => {
     timestamp: new Date(),
   });
 
-  // game counters
+  // increment counters
   gameStore.incrementMessageCount();
 
-  // new game message after reset
-  if (gameStore.userMessageCount === 0 && gameStore.gameNumber > 1) {
-    messages.value = [{
-      id: 1,
-      text: `🎮 New Game #${gameStore.gameNumber} started! Highest score so far: ${gameStore.highestScore}` +
-            (gameStore.highestScoreGame ? ` (Game ${gameStore.highestScoreGame})` : ""),
-      sender: "bot",
-      timestamp: new Date(),
-    }];
+  // 🟡 IMPORTANT FIX:
+  // If a quiz is triggered (e.g., question 5, 10, 15, 20),
+  // stop here and DO NOT call backend yet
+  if (gameStore.showQuiz) {
+    messageText.value = "";
+    return; // Wait until user answers quiz before continuing
   }
 
-  // call backend
+  // New game message after reset (if just reset)
+  if (gameStore.userMessageCount === 0 && gameStore.gameNumber > 1) {
+    messages.value = [
+      {
+        id: 1,
+        text:
+          `🎮 New Game #${gameStore.gameNumber} started! Highest score so far: ${gameStore.highestScore}` +
+          (gameStore.highestScoreGame
+            ? ` (Game ${gameStore.highestScoreGame})`
+            : ""),
+        sender: "bot",
+        timestamp: new Date(),
+      },
+    ];
+    return; // 🟢 prevent calling backend right after reset
+  }
+
+  // normal backend call
   isLoading.value = true;
   const question = messageText.value;
   messageText.value = "";
@@ -242,6 +307,7 @@ const sendMessage = async () => {
   }
 };
 </script>
+
 
 <!-- Uses your existing CSS files for look & feel -->
 <style scoped src="../styles/chat.css"></style>

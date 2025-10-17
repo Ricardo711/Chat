@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { nextTick } from "vue"; // 🟢 new import
 
 export const useGameStore = defineStore("game", {
   state: () => ({
@@ -14,15 +15,17 @@ export const useGameStore = defineStore("game", {
   }),
 
   actions: {
-    incrementMessageCount() {
+    async incrementMessageCount() {
       this.userMessageCount++;
-      if (this.userMessageCount % 5 === 0) {
+
+      // 🟢 When it's time for a quiz, show it and WAIT one tick
+      if (this.userMessageCount % 5 === 0 && this.userMessageCount <= 20) {
         this.generateQuiz();
+        await nextTick(); // ensures quiz is rendered before anything else
+        return; // stop here — don't trigger reset yet
       }
 
-      if (this.userMessageCount >= 20) {
-        this.resetGame();
-      }
+      // ❌ do NOT reset here; let checkAnswer handle it
     },
 
     generateQuiz() {
@@ -37,7 +40,7 @@ export const useGameStore = defineStore("game", {
       this.correctAnswer = "Store genetic information";
     },
 
-    checkAnswer(answer) {
+    async checkAnswer(answer) {
       if (answer === this.correctAnswer) {
         this.score++;
         if (this.score > this.highestScore) {
@@ -45,7 +48,19 @@ export const useGameStore = defineStore("game", {
           this.highestScoreGame = this.gameNumber;
         }
       }
+
+      // hide quiz after answer
       this.showQuiz = false;
+
+      // 🟢 ensure Vue updates before resetting
+      await nextTick();
+
+      // if game reached 20 messages, reset AFTER rendering
+      if (this.userMessageCount >= 20) {
+        setTimeout(() => {
+          this.resetGame();
+        }, 500);
+      }
     },
 
     resetGame() {
