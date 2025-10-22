@@ -7,9 +7,6 @@
           <i class="bi bi-pencil-square"></i>
           <h3>NMSU-TutoringBot-MeatScience</h3>
         </div>
-        <button class="menu-toggle-btn" @click="toggleSidebar">
-          <i class="bi bi-list"></i>
-        </button>
       </div>
     </Motion>
 
@@ -17,21 +14,25 @@
     <div class="chat-content">
       <!-- Bot Info -->
       <Motion :initial="{ opacity: 0, x: -30 }" :animate="{ opacity: 1, x: 0 }"
-              :transition="{ duration: 0.5, delay: 0.2 }">
+        :transition="{ duration: 0.5, delay: 0.2 }">
         <div class="bot-info justify-between">
           <div>
             <h2>IntelligentTutor-MeatScience</h2>
             <p class="bot-status">Set as default</p>
+          </div>
+          <div>
+            <button
+              class="border border-red-200 text-red-400 rounded-full px-10 py-2 hover:bg-red-100 hover:transition-all hover:duration-300 hover:shadow-md"
+              @click="logout">Logout</button>
           </div>
         </div>
       </Motion>
 
       <!-- Messages -->
       <div class="chat-messages" v-if="messages.length > 0 || isLoading">
-        <Motion v-for="(message, index) in messages" :key="message.id"
-                :initial="{ opacity: 0, y: 20, scale: 0.95 }"
-                :animate="{ opacity: 1, y: 0, scale: 1 }"
-                :transition="{ duration: 0.5, delay: message.sender === 'user' ? 0 : 0.3, type: 'spring', stiffness: 200, damping: 20 }">
+        <Motion v-for="(message, index) in messages" :key="message.id" :initial="{ opacity: 0, y: 20, scale: 0.95 }"
+          :animate="{ opacity: 1, y: 0, scale: 1 }"
+          :transition="{ duration: 0.5, delay: message.sender === 'user' ? 0 : 0.3, type: 'spring', stiffness: 200, damping: 20 }">
           <div class="message-container" :class="message.sender">
             <div class="message-bubble" :class="message.sender">
               <!-- Avatar -->
@@ -53,8 +54,8 @@
         </Motion>
 
         <!-- Typing Indicator -->
-        <Motion v-if="isLoading" :initial="{ opacity: 0, y: 20, scale: 0.9 }"
-                :animate="{ opacity: 1, y: 0, scale: 1 }" :transition="{ duration: 0.5 }">
+        <Motion v-if="isLoading" :initial="{ opacity: 0, y: 20, scale: 0.9 }" :animate="{ opacity: 1, y: 0, scale: 1 }"
+          :transition="{ duration: 0.5 }">
           <div class="message-container bot">
             <div class="message-bubble bot loading">
               <div class="bot-avatar">
@@ -66,8 +67,7 @@
                   <span class="bot-status">IntelligentTutor-MeatScience</span>
                 </div>
                 <div class="message-text">
-                  <Motion :animate="{ opacity: [0.3, 1, 0.3] }"
-                          :transition="{ duration: 1.5, repeat: Infinity }">
+                  <Motion :animate="{ opacity: [0.3, 1, 0.3] }" :transition="{ duration: 1.5, repeat: Infinity }">
                     <div class="typing-indicator">
                       <span class="typing-dot"></span>
                       <span class="typing-dot"></span>
@@ -83,7 +83,7 @@
 
       <!-- Welcome Message if empty -->
       <Motion v-else :initial="{ opacity: 0, y: 30, scale: 0.9 }" :animate="{ opacity: 1, y: 0, scale: 1 }"
-              :transition="{ duration: 0.8, delay: 0.3 }">
+        :transition="{ duration: 0.8, delay: 0.3 }">
         <div class="chat-welcome">
           <h3 class="welcome-message">How can I help you today?</h3>
         </div>
@@ -92,11 +92,11 @@
 
     <!-- Input -->
     <Motion :initial="{ opacity: 0, y: 20 }" :animate="{ opacity: 1, y: 0 }"
-            :transition="{ duration: 0.6, delay: 0.4 }">
+      :transition="{ duration: 0.6, delay: 0.4 }">
       <div class="chat-input-container">
         <div class="input-wrapper">
-          <input type="text" placeholder="Send a message" class="message-input"
-                 v-model="messageText" @keyup.enter="sendMessage"/>
+          <input type="text" placeholder="Send a message" class="message-input" v-model="messageText"
+            @keyup.enter="sendMessage" />
           <button class="send-button" @click="sendMessage">
             <i class="bi bi-send mt-1"></i>
           </button>
@@ -111,7 +111,11 @@
 import { ref, nextTick, watch } from 'vue'
 import { Motion } from 'motion-v'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../store/auth'
 
+const router = useRouter()
+const authStore = useAuthStore()
 const messageText = ref('')
 const messages = ref([]) // start empty
 const isLoading = ref(false)
@@ -124,15 +128,6 @@ const scrollToBottom = () => {
   })
 }
 watch([messages, isLoading], () => scrollToBottom(), { deep: true })
-
-const toggleSidebar = () => {
-  const sidebar = document.querySelector(".sidebar");
-  const mainContent = document.querySelector(".main-content");
-  if (sidebar && mainContent) {
-    sidebar.classList.toggle("isOpen");
-    mainContent.classList.toggle("hide");
-  }
-}
 
 // Send message to FastAPI backend
 const sendMessage = async () => {
@@ -172,6 +167,11 @@ const sendMessage = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+const logout = () => {
+  authStore.logout()
+  router.push('/login')
 }
 </script>
 

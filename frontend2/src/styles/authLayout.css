@@ -1,0 +1,299 @@
+.auth-container {
+  background: white;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 600px;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container.register-mode {
+  flex-direction: row-reverse;
+}
+
+.form-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  background: white;
+  position: relative;
+  border-radius: 20px 0 0 20px;
+}
+
+.auth-container.register-mode .form-section {
+  border-radius: 0 20px 20px 0;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.image-section {
+  flex: 1;
+  background: linear-gradient(135deg, #ea6690 0%, #382c44 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 20px 20px 0;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-container.register-mode .image-section {
+  border-radius: 20px 0 0 20px;
+}
+
+.image-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("../assets/nmsu_auth.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-content {
+  text-align: center;
+  color: white;
+  z-index: 1;
+  position: relative;
+}
+
+.welcome-text h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(45deg, #fff, #f0f0f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.welcome-text p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  line-height: 1.6;
+  max-width: 300px;
+  margin: 0 auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Animaciones adicionales */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.image-content {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Tablets grandes y pantallas medianas */
+@media (max-width: 1024px) {
+  .auth-container {
+    max-width: 900px;
+    margin: 20px;
+  }
+  
+  .form-section,
+  .image-section {
+    padding: 50px 30px;
+  }
+  
+  .welcome-text h2 {
+    font-size: 2.2rem;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+    min-height: auto;
+    margin: 10px;
+    border-radius: 15px;
+  }
+
+  .auth-container.register-mode {
+    flex-direction: column;
+  }
+
+  .form-section,
+  .image-section {
+    border-radius: 0;
+    padding: 40px 30px;
+  }
+  
+  .form-section {
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .image-section {
+    border-radius: 0 0 15px 15px;
+  }
+
+  .welcome-text h2 {
+    font-size: 2rem;
+  }
+
+  .welcome-text p {
+    font-size: 1rem;
+  }
+  
+  .form-wrapper {
+    max-width: 100%;
+  }
+}
+
+/* Móviles grandes */
+@media (max-width: 480px) {
+  .auth-container {
+    margin: 5px;
+    border-radius: 10px;
+    min-height: 100vh;
+  }
+  
+  .form-section,
+  .image-section {
+    padding: 30px 20px;
+  }
+  
+  .form-section {
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .image-section {
+    border-radius: 0 0 10px 10px;
+  }
+
+  .welcome-text h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .welcome-text p {
+    font-size: 0.95rem;
+    max-width: 280px;
+  }
+  
+  .form-wrapper {
+    max-width: 100%;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 360px) {
+  .auth-container {
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+  
+  .form-section,
+  .image-section {
+    padding: 25px 15px;
+  }
+  
+  .form-section {
+    border-radius: 0;
+  }
+  
+  .image-section {
+    border-radius: 0;
+  }
+
+  .welcome-text h2 {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+
+  .welcome-text p {
+    font-size: 0.9rem;
+    max-width: 260px;
+  }
+}
+
+/* Orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+  .auth-container {
+    min-height: 100vh;
+    flex-direction: row;
+  }
+  
+  .auth-container.register-mode {
+    flex-direction: row-reverse;
+  }
+  
+  .form-section,
+  .image-section {
+    padding: 20px 15px;
+  }
+  
+  .welcome-text h2 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+  
+  .welcome-text p {
+    font-size: 0.8rem;
+    max-width: 200px;
+  }
+}
+
+/* Pantallas muy pequeñas en altura */
+@media (max-height: 600px) {
+  .form-section,
+  .image-section {
+    padding: 20px 15px;
+  }
+  
+  .welcome-text h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .welcome-text p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Dispositivos de alta densidad */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .auth-container {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+  
+  .form-section {
+    background: rgba(255, 255, 255, 0.98);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .form-group input {
+    font-size: 16px;
+  }
+  
+  .submit-button {
+    min-height: 44px;
+  }
+}
